@@ -46,7 +46,7 @@ public class SeccionService {
             throw new DuplicadoException("RN-01", "Ya existe una sección con el código \"" + codigo + "\"");
         }
         Seccion nueva = datos.copia().conCodigo(codigo).conNombre(datos.getNombre().trim());
-        nueva.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
+        nueva.setAuditoria(ctx.sello());
         return repo.guardar(codigo, nueva);
     }
 
@@ -69,7 +69,7 @@ public class SeccionService {
         }
         validar(nueva);
         nueva.conNombre(nueva.getNombre().trim());
-        nueva.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
+        nueva.setAuditoria(ctx.sello());
         return repo.guardar(codigo, nueva);
     }
 
@@ -85,7 +85,7 @@ public class SeccionService {
     public Seccion cambiarEstado(String codigo, String estado) {
         validarEstado(estado);
         Seccion seccion = obtener(codigo).conEstado(estado);
-        seccion.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
+        seccion.setAuditoria(ctx.sello());
         return repo.guardar(seccion.getCodigo(), seccion);
     }
 }

@@ -61,7 +61,7 @@ public class AplicacionService {
                 .conUnidad(producto.getUnidad())
                 .conResponsable(responsable)
                 .conObservaciones(datos.getObservaciones() == null ? "" : datos.getObservaciones().trim());
-        nueva.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
+        nueva.setAuditoria(ctx.sello());
         return repo.guardar(codigo, nueva);
     }
 

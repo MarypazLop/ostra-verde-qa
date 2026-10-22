@@ -38,7 +38,7 @@ public class ProductoService {
                 .conCodigo(codigo)
                 .conNombre(datos.getNombre().trim())
                 .conDescripcion(datos.getDescripcion() == null ? "" : datos.getDescripcion().trim());
-        nuevo.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
+        nuevo.setAuditoria(ctx.sello());
         return repo.guardar(codigo, nuevo);
     }
 
@@ -62,7 +62,7 @@ public class ProductoService {
             nuevo.conUnidad(cambios.getUnidad());
         }
         validar(nuevo);
-        nuevo.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
+        nuevo.setAuditoria(ctx.sello());
         return repo.guardar(nuevo.getCodigo(), nuevo);
     }
 

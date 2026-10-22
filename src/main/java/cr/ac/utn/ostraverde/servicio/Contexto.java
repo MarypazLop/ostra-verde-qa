@@ -1,6 +1,7 @@
 package cr.ac.utn.ostraverde.servicio;
 
 import cr.ac.utn.ostraverde.excepciones.AccesoDenegadoException;
+import cr.ac.utn.ostraverde.modelo.Auditoria;
 import cr.ac.utn.ostraverde.modelo.Sesion;
 import cr.ac.utn.ostraverde.repositorio.BaseDatos;
 
@@ -50,5 +51,10 @@ public class Contexto {
         if (sesion == null || sesion.usuario() == null || sesion.usuario().isBlank()) {
             throw new AccesoDenegadoException();
         }
+    }
+
+    /** RNF-10: sello de auditoría con el usuario y la fecha de la operación. */
+    public Auditoria sello() {
+        return new Auditoria(sesion.usuario(), ahora().toString());
     }
 }

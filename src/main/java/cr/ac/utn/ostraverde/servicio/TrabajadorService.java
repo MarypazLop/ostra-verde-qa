@@ -41,7 +41,7 @@ public class TrabajadorService {
                 .conNombre(datos.getNombre().trim())
                 .conCorreo(datos.getCorreo().trim())
                 .conCargo(datos.getCargo().trim());
-        nuevo.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
+        nuevo.setAuditoria(ctx.sello());
         return repo.guardar(identificacion, nuevo);
     }
 
@@ -73,7 +73,7 @@ public class TrabajadorService {
             nuevo.conCargo(cambios.getCargo());
         }
         validar(nuevo);
-        nuevo.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
+        nuevo.setAuditoria(ctx.sello());
         return repo.guardar(nuevo.getIdentificacion(), nuevo);
     }
 }
