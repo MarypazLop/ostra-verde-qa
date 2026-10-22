@@ -1,0 +1,13 @@
+# Maven
+target/
+# Spring Tools / Eclipse
+.classpath
+.project
+.settings/
+.factorypath
+.springBeans
+.sts4-cache/
+# IntelliJ / VS Code
+.idea/
+*.iml
+.vscode/
