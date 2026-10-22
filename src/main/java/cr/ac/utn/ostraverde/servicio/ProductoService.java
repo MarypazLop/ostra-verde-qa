@@ -27,6 +27,7 @@ public class ProductoService {
     }
 
     public Producto registrar(Producto datos) {
+        ctx.verificarSesion();
         Validaciones.requerido(datos.getCodigo(), "codigo");
         validar(datos);
         String codigo = Validaciones.normalizarCodigo(datos.getCodigo());
@@ -37,11 +38,13 @@ public class ProductoService {
                 .conCodigo(codigo)
                 .conNombre(datos.getNombre().trim())
                 .conDescripcion(datos.getDescripcion() == null ? "" : datos.getDescripcion().trim());
+        nuevo.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(codigo, nuevo);
     }
 
     /** Los campos nulos de "cambios" se dejan como están. */
     public Producto modificar(String codigoBuscado, Producto cambios) {
+        ctx.verificarSesion();
         Producto nuevo = consultar(codigoBuscado);
         if (cambios.getCodigo() != null && !Validaciones.normalizarCodigo(cambios.getCodigo()).equals(nuevo.getCodigo())) {
             throw new ValidacionException("codigo", "El código del producto no puede modificarse");
@@ -59,6 +62,7 @@ public class ProductoService {
             nuevo.conUnidad(cambios.getUnidad());
         }
         validar(nuevo);
+        nuevo.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(nuevo.getCodigo(), nuevo);
     }
 
@@ -71,6 +75,7 @@ public class ProductoService {
     }
 
     public boolean eliminar(String codigoBuscado) {
+        ctx.verificarSesion();
         Producto producto = consultar(codigoBuscado);
         boolean usado = ctx.getBd().aplicaciones().listar().stream()
                 .anyMatch(a -> producto.getCodigo().equals(a.getProducto()));

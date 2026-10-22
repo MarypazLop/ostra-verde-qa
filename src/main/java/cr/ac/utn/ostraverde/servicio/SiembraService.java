@@ -24,6 +24,7 @@ public class SiembraService {
     }
 
     public Siembra registrar(Siembra datos) {
+        ctx.verificarSesion();
         // RES-05: todo es obligatorio excepto observaciones
         Validaciones.requerido(datos.getCodigo(), "codigo");
         Validaciones.requerido(datos.getFecha(), "fecha");
@@ -65,6 +66,7 @@ public class SiembraService {
                 .conResponsable(responsable)
                 .conObservaciones(datos.getObservaciones() == null ? "" : datos.getObservaciones().trim())
                 .conEstado("Activa");
+        nueva.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         Siembra guardada = repo.guardar(codigo, nueva);
         secciones.cambiarEstado(seccion.getCodigo(), "Ocupada"); // RF-08 / RN-08
         return guardada;
@@ -81,6 +83,7 @@ public class SiembraService {
     /** Uso interno de cosechas. */
     public Siembra marcarCosechada(String codigo) {
         Siembra siembra = obtener(codigo).conEstado("Cosechada");
+        siembra.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(siembra.getCodigo(), siembra);
     }
 }

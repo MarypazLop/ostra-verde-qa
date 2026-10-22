@@ -23,6 +23,7 @@ public class AplicacionService {
     }
 
     public Aplicacion registrar(Aplicacion datos) {
+        ctx.verificarSesion();
         // RES-08: todo es obligatorio excepto observaciones
         Validaciones.requerido(datos.getCodigo(), "codigo");
         Validaciones.requerido(datos.getFecha(), "fecha");
@@ -60,6 +61,7 @@ public class AplicacionService {
                 .conUnidad(producto.getUnidad())
                 .conResponsable(responsable)
                 .conObservaciones(datos.getObservaciones() == null ? "" : datos.getObservaciones().trim());
+        nueva.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(codigo, nueva);
     }
 

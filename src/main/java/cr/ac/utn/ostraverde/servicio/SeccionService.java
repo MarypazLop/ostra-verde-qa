@@ -38,6 +38,7 @@ public class SeccionService {
     }
 
     public Seccion registrar(Seccion datos) {
+        ctx.verificarSesion();
         Validaciones.requerido(datos.getCodigo(), "codigo");
         validar(datos);
         String codigo = Validaciones.normalizarCodigo(datos.getCodigo());
@@ -45,11 +46,13 @@ public class SeccionService {
             throw new DuplicadoException("RN-01", "Ya existe una sección con el código \"" + codigo + "\"");
         }
         Seccion nueva = datos.copia().conCodigo(codigo).conNombre(datos.getNombre().trim());
+        nueva.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(codigo, nueva);
     }
 
     /** Los campos nulos de "cambios" se dejan como están. */
     public Seccion modificar(String codigoBuscado, Seccion cambios) {
+        ctx.verificarSesion();
         String codigo = Validaciones.normalizarCodigo(codigoBuscado);
         Seccion nueva = Validaciones.debeExistir(repo, codigo, "Sección");
         if (cambios.getCodigo() != null && !Validaciones.normalizarCodigo(cambios.getCodigo()).equals(codigo)) {
@@ -66,6 +69,7 @@ public class SeccionService {
         }
         validar(nueva);
         nueva.conNombre(nueva.getNombre().trim());
+        nueva.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(codigo, nueva);
     }
 
@@ -81,6 +85,7 @@ public class SeccionService {
     public Seccion cambiarEstado(String codigo, String estado) {
         validarEstado(estado);
         Seccion seccion = obtener(codigo).conEstado(estado);
+        seccion.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(seccion.getCodigo(), seccion);
     }
 }

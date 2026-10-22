@@ -27,6 +27,7 @@ public class CosechaService {
     }
 
     public Cosecha registrar(Cosecha datos) {
+        ctx.verificarSesion();
         Validaciones.requerido(datos.getCodigo(), "codigo");
         Validaciones.requerido(datos.getFecha(), "fecha");
         Validaciones.requerido(datos.getSiembra(), "siembra");
@@ -63,6 +64,7 @@ public class CosechaService {
                 .conSiembra(siembra.getCodigo())
                 .conSeccion(siembra.getSeccion())
                 .conResponsable(responsable);
+        nueva.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         Cosecha guardada = repo.guardar(codigo, nueva);
         siembras.marcarCosechada(siembra.getCodigo());
         secciones.cambiarEstado(siembra.getSeccion(), "Disponible"); // RF-15 / RN-17

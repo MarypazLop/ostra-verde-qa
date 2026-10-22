@@ -30,6 +30,7 @@ public class TrabajadorService {
     }
 
     public Trabajador registrar(Trabajador datos) {
+        ctx.verificarSesion();
         validar(datos);
         String identificacion = datos.getIdentificacion().trim();
         if (repo.existe(identificacion)) {
@@ -40,6 +41,7 @@ public class TrabajadorService {
                 .conNombre(datos.getNombre().trim())
                 .conCorreo(datos.getCorreo().trim())
                 .conCargo(datos.getCargo().trim());
+        nuevo.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(identificacion, nuevo);
     }
 
@@ -53,6 +55,7 @@ public class TrabajadorService {
 
     /** Los campos nulos de "cambios" se dejan como están. */
     public Trabajador actualizar(String identificacion, Trabajador cambios) {
+        ctx.verificarSesion();
         Trabajador nuevo = consultar(identificacion);
         if (cambios.getIdentificacion() != null && !cambios.getIdentificacion().trim().equals(nuevo.getIdentificacion())) {
             throw new ValidacionException("identificacion", "La identificación del trabajador no puede modificarse");
@@ -70,6 +73,7 @@ public class TrabajadorService {
             nuevo.conCargo(cambios.getCargo());
         }
         validar(nuevo);
+        nuevo.setAuditoria(new cr.ac.utn.ostraverde.modelo.Auditoria(ctx.getSesion().usuario(), ctx.ahora().toString()));
         return repo.guardar(nuevo.getIdentificacion(), nuevo);
     }
 }

@@ -1,5 +1,6 @@
 package cr.ac.utn.ostraverde.servicio;
 
+import cr.ac.utn.ostraverde.excepciones.AccesoDenegadoException;
 import cr.ac.utn.ostraverde.modelo.Sesion;
 import cr.ac.utn.ostraverde.repositorio.BaseDatos;
 
@@ -42,5 +43,12 @@ public class Contexto {
 
     public Instant ahora() {
         return Instant.now(reloj);
+    }
+
+    /** RNF-06: solo usuarios con sesión pueden registrar, modificar o eliminar. */
+    public void verificarSesion() {
+        if (sesion == null || sesion.usuario() == null || sesion.usuario().isBlank()) {
+            throw new AccesoDenegadoException();
+        }
     }
 }
