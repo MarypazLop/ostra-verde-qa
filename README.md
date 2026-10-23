@@ -3,7 +3,7 @@
 Sistema de Gestión para la Producción de Hongos Ostra. Repositorio de la **Fase 4** del proyecto de
 ISW-622 Pruebas de Software (UTN), facilitador Víctor Iván Zúñiga Zúñiga.
 
-Integrantes: Marypaz López Sánchez y Belem.
+Integrantes: Marypaz López y Belem Gamboa.
 
 Tecnología: Java 17, Spring Boot 3.3, Maven y JUnit 5 (Jupiter). Se abre y ejecuta en **Spring Tools (STS)**.
 
